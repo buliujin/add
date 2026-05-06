@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字字间插入符号工具</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:微软雅黑,sans-serif;}
+        body{padding:30px;background:#f5f7fa;}
+        .box{max-width:600px;margin:0 auto;background:#fff;padding:25px;border-radius:12px;box-shadow:0 2px 10px #00000015;}
+        h2{text-align:center;margin-bottom:20px;color:#333;}
+        textarea{width:100%;height:120px;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px;resize:none;margin-bottom:15px;}
+        .btn{display:block;width:100%;padding:12px;background:#409eff;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;margin-bottom:15px;}
+        .btn:hover{background:#337ecc;}
+        #res{min-height:80px;padding:12px;border:1px solid #eee;border-radius:8px;background:#fafafa;word-break:break-all;}
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>文字每字中间插入 ⁣⁡ 符号</h2>
+        <textarea id="inputTxt" placeholder="请输入要处理的文字..."></textarea>
+        <button class="btn" onclick="addSymbol()">一键插入符号</button>
+        <div id="res"></div>
+        <button class="btn" style="margin-top:15px;background:#67c23a;" onclick="copyRes()">一键复制结果</button>
+    </div>
+
+    <script>
+        // 要插入的固定符号
+        const splitStr = "⁣⁡";
+
+        function addSymbol(){
+            let txt = document.getElementById('inputTxt').value.trim();
+            if(!txt){
+                alert('请先输入文字');
+                return;
+            }
+            // 每个字中间插入符号
+            let result = txt.split('').join(splitStr);
+            document.getElementById('res').innerText = result;
+        }
+
+        function copyRes(){
+            let resText = document.getElementById('res').innerText;
+            if(!resText){
+                alert('暂无可复制内容');
+                return;
+            }
+            // 复制到剪贴板
+            navigator.clipboard.writeText(resText).then(()=>{
+                alert('复制成功！');
+            }).catch(()=>{
+                // 兼容低版本浏览器
+                let textarea = document.createElement('textarea');
+                textarea.value = resText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('复制成功！');
+            });
+        }
+    </script>
+</body>
+</html>
